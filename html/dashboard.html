@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Dashboard</h2>
+<div class="row">
+    <!-- Timesheets -->
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-info text-white">
+                <h3 class="mb-0">Your Timesheets</h3>
+            </div>
+            <div class="card-body">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Week Starting</th>
+                            <th>Total Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody id="timesheet-list">
+                        <!-- Timesheets will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Task Board -->
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Task Board</h3>
+                <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#createTaskModal">Create Task</button>
+            </div>
+            <div class="card-body">
+                <ul class="nav nav-tabs" id="taskTabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#new-tasks">New Tasks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#pending-tasks">Pending Tasks</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#completed-tasks">Completed Tasks</a>
+                    </li>
+                </ul>
+                <div class="tab-content mt-3">
+                    <!-- New Tasks -->
+                    <div class="tab-pane fade show active" id="new-tasks">
+                        <div id="new-tasks-list">
+                            <!-- New tasks will be dynamically added here -->
+                        </div>
+                    </div>
+                    <!-- Pending Tasks -->
+                    <div class="tab-pane fade" id="pending-tasks">
+                        <div id="pending-tasks-list">
+                            <!-- Pending tasks will be dynamically added here -->
+                        </div>
+                    </div>
+                    <!-- Completed Tasks -->
+                    <div class="tab-pane fade" id="completed-tasks">
+                        <div id="completed-tasks-list">
+                            <!-- Completed tasks will be dynamically added here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create Task Modal -->
+<div class="modal fade" id="createTaskModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Create Task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="create-task-form">
+                    <div class="mb-3">
+                        <label for="task-title" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="task-title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="task-description" class="form-label">Description</label>
+                        <textarea class="form-control" id="task-description" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="task-image" class="form-label">Add Image</label>
+                        <input type="file" class="form-control" id="task-image">
+                    </div>
+                    <div class="mb-3">
+                        <label for="task-date" class="form-label">Date</label>
+                        <input type="date" class="form-control" id="task-date" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="task-employee" class="form-label">Employee</label>
+                        <select class="form-control" id="task-employee" required>
+                            <!-- Employees will be dynamically added here -->
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Create Task</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

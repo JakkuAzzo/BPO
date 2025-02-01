@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+<div class="card shadow-sm">
+    <div class="card-header bg-danger text-white">
+        <h3 class="mb-0">Admin Controls</h3>
+    </div>
+    <div class="card-body">
+        <div class="mb-3">
+            <label for="hourly-rate" class="form-label">Set Hourly Rate</label>
+            <input type="number" step="0.01" class="form-control" id="hourly-rate">
+        </div>
+        <div class="mb-3">
+            <label for="overtime-rate" class="form-label">Set Overtime Rate</label>
+            <input type="number" step="0.01" class="form-control" id="overtime-rate">
+        </div>
+        <button class="btn btn-primary" onclick="updateRates()">Update Rates</button>
+    </div>
+</div>
+{% endblock %}

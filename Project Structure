@@ -1,0 +1,26 @@
+business-productivity-app/
+│
+├── app/
+│   ├── __init__.py
+│   ├── models.py
+│   ├── routes.py
+│   ├── auth.py
+│   ├── admin.py
+│   ├── timesheet.py
+│   ├── templates/
+│   │   ├── base.html
+│   │   ├── admin_dashboard.html
+│   │   ├── admin.html
+│   │   ├── create_timesheet.html
+│   │   ├── login.html
+│   │   ├── register.html
+│   │   └── dashboard.html
+│   └── static/
+│       ├── style.css
+│       ├── normalise.css
+│       └── uploads/
+│
+├── migrations/
+├── config.py
+├── requirements.txt
+└── run.py

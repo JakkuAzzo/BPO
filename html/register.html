@@ -1,0 +1,22 @@
+<!-- register.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Register</h2>
+<div class="card shadow-sm">
+    <div class="card-body">
+        <form id="register-form">
+            <div class="mb-3">
+                <label for="register-email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="register-email" required>
+            </div>
+            <div class="mb-3">
+                <label for="register-password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="login-password" required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Register My Company</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+           
