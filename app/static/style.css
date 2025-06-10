@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Roboto', sans-serif;
     background-color: #f0f4f8; /* Light pastel background */
     color: #333; /* Softer than black for text */
     margin: 0;
@@ -48,6 +50,10 @@ input[type="file"] {
     border: 2px dashed #92a8d1; /* Dashed border for file input */
 }
 
+.btn {
+    transition: background-color 0.3s ease;
+}
+
 .btn-primary {
     background-color: #000000; /* Black primary button */
     border: none;
@@ -70,6 +76,10 @@ input[type="file"] {
     outline: oldlace;
 }
 
+.navbar {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .card {
     background-color: #000000; /* Black background for cards */
     color: white; /* White text for cards */
@@ -77,6 +87,11 @@ input[type="file"] {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for cards */
     border-radius: 8px;
     border: 1px solid white; /* White border for cards */
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
 }
 
 .card.secondary {
@@ -98,10 +113,13 @@ input[type="file"] {
 }
 
 footer {
-    margin-top: 40px;
-    color: #ffffff; /* White footer text */
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #343a40;
+    color: #ffffff;
     text-align: center;
-    padding: 20px;
+    padding: 10px 0;
 }
 
 .wave-container {
@@ -225,7 +243,7 @@ footer {
     border: 1px solid #888;
     width: 80%;
     max-width: 500px;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 .close {
@@ -240,4 +258,22 @@ footer {
     color: black;
     text-decoration: none;
     cursor: pointer;
+}
+
+.day-section {
+    display: none;
+    margin-top: 10px;
+}
+
+.day-button {
+    margin: 5px;
+}
+
+.task-card {
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.task-card:hover {
+    transform: scale(1.02);
 }
