@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Input from './ui/Input';
 import Button from './ui/Button';
 import { Listbox } from '@headlessui/react';
@@ -8,6 +9,12 @@ const orgs = ['Acme Corp', 'Globex', 'Soylent'];
 export default function LoginTabs() {
   const [tab, setTab] = useState<'org' | 'emp' | 'guest'>('org');
   const [selectedOrg, setSelectedOrg] = useState(orgs[0]);
+  const navigate = useNavigate();
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    navigate('/dashboard');
+  };
 
   return (
     <div className="w-full max-w-md mx-auto">\
@@ -17,7 +24,7 @@ export default function LoginTabs() {
         <button className={`flex-1 p-2 ${tab==='guest'?'border-b-2 border-primary':''}`} onClick={()=>setTab('guest')}>Guest</button>
       </div>
       {tab==='org' && (
-        <form className="space-y-4" aria-label="Organisation login form">
+        <form className="space-y-4" aria-label="Organisation login form" onSubmit={handleLogin}>
           <Listbox value={selectedOrg} onChange={setSelectedOrg}>
             <div className="relative">
               <Listbox.Button className="w-full rounded-md border-gray-300 shadow-sm py-2 pl-3 pr-10 text-left focus:border-primary focus:ring-primary">
@@ -35,14 +42,14 @@ export default function LoginTabs() {
         </form>
       )}
       {tab==='emp' && (
-        <form className="space-y-4" aria-label="Employee login form">
+        <form className="space-y-4" aria-label="Employee login form" onSubmit={handleLogin}>
           <Input placeholder="Email" type="email" aria-label="Email" />
           <Input type="password" placeholder="Password" aria-label="Password" />
           <Button type="submit" className="w-full">Login</Button>
         </form>
       )}
       {tab==='guest' && (
-        <form className="space-y-4" aria-label="Guest login form">
+        <form className="space-y-4" aria-label="Guest login form" onSubmit={handleLogin}>
           <Input placeholder="Name" aria-label="Name" />
           <Button type="submit" className="w-full">Enter</Button>
         </form>
