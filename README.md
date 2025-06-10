@@ -33,17 +33,15 @@ See `app/readme.md` for detailed information about the application itself.
    pip install -r app/requirements.txt
    ```
 2. Copy `.env.example` to `.env` and update the values for your environment.
-3. Start the Flask API:
-   ```bash
-   export FLASK_APP=app/app.py
-   flask run
-   ```
-
-4. In a separate terminal start the React front‑end:
+3. Install Node dependencies for the front‑end:
    ```bash
    cd frontend
    npm install
-   npm run dev
+   cd ..
+   ```
+4. Start both servers together using the provided helper script:
+   ```bash
+   ./start.sh
    ```
 
 ## Tests
