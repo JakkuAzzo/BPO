@@ -1,10 +1,9 @@
 # Business Productivity Optimization (BPO)
 
-This repository contains a Flask based time sheet and job card tracking system.
-The application originally lived in `BPO Main/AutoTimeSheet-main` and the root
-of the repository contained a small HTML prototype.  The project has been
-restructured so that the production code resides in `app/` and the prototype
-files are stored in `prototype/`.
+This project implements a small productivity platform.  A Flask API manages
+users, organisations, tasks, job cards and timesheets.  A lightweight React
+front‑end (under `frontend/`) consumes this API.  Older HTML templates are kept
+under `prototype/` for reference.
 
 ## Project Structure
 
@@ -15,21 +14,36 @@ prototype/           # Static prototype for future redesigns
 .gitignore           # Repository ignore rules
 ```
 
+## Features
+
+- User and organisation management
+- Create and update tasks
+- Upload timesheets and job cards
+- React dashboard served separately from the API
+
 See `app/readme.md` for detailed information about the application itself.
 
 ## Running the Application
 
-1. Create a virtual environment and install the requirements:
+1. Create a virtual environment and install the requirements for the Flask
+   server:
    ```bash
    python3 -m venv venv
    source venv/bin/activate
    pip install -r app/requirements.txt
    ```
 2. Copy `.env.example` to `.env` and update the values for your environment.
-3. Run the application:
+3. Start the Flask API:
    ```bash
    export FLASK_APP=app/app.py
    flask run
+   ```
+
+4. In a separate terminal start the React front‑end:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
    ```
 
 ## Tests

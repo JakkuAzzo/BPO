@@ -1,5 +1,6 @@
 # app.py
 from flask import Flask
+from flask_cors import CORS
 from .init_extensions import setup, login_manager, db
 #import init_extensions
 from .models import User
@@ -10,6 +11,7 @@ from dotenv import load_dotenv
 def create_app(config_class=Config):
     print("setting app environment var")
     app = Flask(__name__)
+    CORS(app)
     print("App environment var set")
     app.config.from_object(Config)
     print("App configured")
