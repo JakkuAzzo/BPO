@@ -1,0 +1,4 @@
+{
+  "completed": ["Initial React UI", "Timesheet upload"],
+  "upcoming": ["Calendar integration", "Kanban board"]
+}
