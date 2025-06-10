@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timesheet Management</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='normalise.css') }}">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evSXBKJEiCTixQwlq2q77hbpPEXBUdzwFyjwoUA7zJM2TpwUSL2gjT7jicSP3D" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6nlK8I8Kiy1G+GYqD8f6sa4U5Uc7JsWE5FjC/+6EGmTukoCkfmh" crossorigin="anonymous"></script>
+  <link href='https://fullcalendar.io/releases/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
+  <script src='https://fullcalendar.io/releases/fullcalendar/3.10.2/lib/moment.min.js'></script>
+  <script src='https://fullcalendar.io/releases/fullcalendar/3.10.2/fullcalendar.min.js'></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://unpkg.com/interactjs/dist/interact.min.js"></script>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+  <div class="container">
+    <header class="container-fluid bg-light">
+      <div class="nav-body">
+        <div class="container d-flex justify-content-between align-items-center py-3">
+          {% if current_user.is_authenticated %}
+            <div>
+              <h1>{{ current_user.organisation.name if current_user.organisation else 'Your Organisation' }}</h1>
+              {% if current_user.organisation and current_user.organisation.logo %}
+                <img src="{{ url_for('static', filename='uploads/' + current_user.organisation.logo) }}" alt="Company Logo" style="height: 50px;">
+              {% else %}
+                <img src="{{ url_for('static', filename='default_logo.png') }}" alt="Company Logo" style="height: 50px;">
+              {% endif %}
+            </div>
+          {% else %}
+            <div>
+              <h1>Welcome Guest</h1>
+              <img src="{{ url_for('static', filename='default_logo.png') }}" alt="Company Logo" style="height: 50px;">
+              <p class="demo-text"> This is a demo version of the Business Productivity Optimisation App</p>
+              <p class="demo-text"> Please note that some features may not be available, but feel free to have a look around</p>
+              <p class="demo-text"> Make an account to try the features currently availiable</p>
+            </div>
+          {% endif %}
+
+          <nav class="nav">
+            <a class="nav-link" href="{{ url_for('main.info') }}">Info</a>
+            {% if current_user.is_authenticated %}
+              <a class="nav-link" href="{{ url_for('main.index') }}">Home Page</a>
+              <a class="nav-link" href="{{ url_for('account.account_settings') }}">Account Settings</a>
+              <a class="nav-link" href="{{ url_for('account.logout') }}">Logout</a>
+              {% if current_user.is_admin %}
+                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Manage Organisation</a>
+            {% endif %}
+          </nav>
+          {% endif %}
+        </div>
+      </div>
+    </header>
+  </div>
+
+  <main class="container mt-5">
+    <div class="container">
+      <div class="card mb-5">
+        <div class="card-header">Actions</div>
+        <div class="card-body">
+          <a href="{{ url_for('main.create_timesheet') }}" class="btn btn-primary">Create Timesheet</a>
+          <a href="{{ url_for('main.create_job_card') }}" class="btn btn-primary">Create Job Card</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="card">
+        <div class="card-header">Upload Timesheet</div>
+        <div class="card-body">
+          <form id="uploadForm" action="/upload" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+              <label for="timesheetFile" class="form-label">Drag and Drop Timesheet Here or</label>
+              <input class="form-control" type="file" id="timesheetFile" name="file" accept=".docx,.pdf">
+              <div id="fileError" class="invalid-feedback"></div>
+            </div>
+            <button type="submit" class="btn btn-primary">Upload</button>
+            <span id="uploadStatus" class="text-muted"></span>
+          </form>
+          <br>
+          <a href="/download_template" class="btn btn-secondary">Download Timesheet Template</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="card mt-5">
+        <div class="card-header">Recent Uploads</div>
+        <div class="card-body">
+          <p>This feature is currently unavailable.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="card mt-5">
+        <div class="card-header">View Calendar</div>
+        <div class="card-body">
+          <p>View / Modify Organisation calendar events listed here</p>
+          <div id='calendar'></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="card mt-5">
+        <div class="card-header">Job Board</div>
+        <div class="card-body">
+          <div id="job-board">
+            <div id="to-do" class="job-column">
+              <h2>To-Do</h2>
+              <!-- To-Do tasks will be added here -->
+            </div>
+            <div id="in-progress" class="job-column">
+              <h2>In-Progress</h2>
+              <!-- In-Progress tasks will be added here -->
+            </div>
+            <div id="completed" class="job-column">
+              <h2>Completed</h2>
+              <!-- Completed tasks will be added here -->
+            </div>
+          </div>
+          <a href="#" class="btn btn-primary" id="create-task-btn">Create Task</a>
+          <a href="#" class="btn btn-primary" id="modify-task-btn">Modify Task</a>
+          <a href="#" class="btn btn-primary" id="delete-task-btn">Delete Task</a>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+    <div id="task-modal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <form id="task-form">
+          <label for="task-message">Task Message:</label>
+          <textarea id="task-message" name="task-message" required></textarea>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </form>
+      </div>
+    </div>
+
+  <script>
+    $(document).ready(function() {
+      $('#calendar').fullCalendar({
+        events: '/get_timesheet_events', // Endpoint to fetch events
+        editable: true,
+        selectable: true,
+        selectHelper: true,
+        eventRender: function(event, element) {
+          if (event.sick) {
+            element.css('background-color', 'red');
+          } else if (event.holiday) {
+            element.css('background-color', 'blue');
+          }
+        },
+        select: function(start, end) {
+          // Open modal or prompt to add sick/holiday
+        }
+      });
+
+      $('#create-task-btn').click(function() {
+        var title = prompt("Enter task title:");
+        if (title) {
+          $.ajax({
+            url: '/create_task',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ title: title, description: '' }),
+            success: function(response) {
+              if (response.success) {
+                alert("Task created successfully!");
+                // Add the new task to the "To-Do" column
+                $('#to-do').append(
+                  `<div class="job-task" data-id="${response.task.id}">
+                    <p>${response.task.title}</p>
+                  </div>`
+                );
+                // Add drag-and-drop functionality to the new task
+                interact('.job-task').draggable({
+                  inertia: true,
+                  autoScroll: true,
+                  onmove: dragMoveListener,
+                  onend: function(event) {
+                    var textEl = event.target.querySelector('p');
+                    textEl && (textEl.textContent =
+                      'moved a distance of ' +
+                      (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
+                        Math.pow(event.pageY - event.y0, 2) | 0))
+                        .toFixed(2) + 'px');
+                  }
+                });
+              } else {
+                alert("Failed to create task.");
+              }
+            }
+          });
+        }
+      });
+
+      $('#delete-task-btn').click(function() {
+        // Functionality to delete a task
+      });
+
+      interact('.job-task').draggable({
+        inertia: true,
+        autoScroll: true,
+        onmove: dragMoveListener,
+        onend: function(event) {
+          var textEl = event.target.querySelector('p');
+          textEl && (textEl.textContent =
+            'moved a distance of ' +
+            (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
+              Math.pow(event.pageY - event.y0, 2) | 0))
+              .toFixed(2) + 'px');
+        }
+      });
+
+      function dragMoveListener(event) {
+        var target = event.target,
+          x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+          y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+        target.style.transform = 'translate(' + x + 'px, ' + y + 'px)';
+
+        target.setAttribute('data-x', x);
+        target.setAttribute('data-y', y);
+      }
+
+      interact('.job-column').dropzone({
+        accept: '.job-task',
+        overlap: 0.5,
+        ondropactivate: function(event) {
+          event.target.classList.add('drop-active');
+        },
+        ondragenter: function(event) {
+          var draggableElement = event.relatedTarget,
+            dropzoneElement = event.target;
+
+          dropzoneElement.classList.add('drop-target');
+          draggableElement.classList.add('can-drop');
+          draggableElement.textContent = 'Dragged in';
+        },
+        ondragleave: function(event) {
+          event.target.classList.remove('drop-target');
+          event.relatedTarget.classList.remove('can-drop');
+          event.relatedTarget.textContent = 'Dragged out';
+        },
+        ondrop: function(event) {
+          event.relatedTarget.textContent = 'Dropped';
+        },
+        ondropdeactivate: function(event) {
+          event.target.classList.remove('drop-active');
+          event.target.classList.remove('drop-target');
+        }
+      });
+
+      const form = document.getElementById('uploadForm');
+      const fileInput = document.getElementById('timesheetFile');
+      const fileError = document.getElementById('fileError');
+      const uploadStatus = document.getElementById('uploadStatus');
+
+      form.addEventListener('submit', (event) => {
+        const file = fileInput.files[0];
+        const acceptedExtensions = ['docx', 'pdf'];
+        if (file && !acceptedExtensions.includes(file.name.split('.').pop().toLowerCase())) {
+          event.preventDefault();
+          fileError.textContent = 'Invalid file format. Please upload a .docx or .pdf file.';
+          fileError.style.display = 'block';
+          uploadStatus.textContent = '';
+        } else {
+          fileError.textContent = '';
+          fileError.style.display = 'none';
+          uploadStatus.textContent = 'Uploading...';
+        }
+      });
+    });
+  </script>
+
+  <footer class="mt-auto py-3 bg-light text-center">
+    <div class="container">
+      <p>&copy; 2024 Business Productivity Optimisation App - Nathan Brown-Bennett</p>
+    </div>
+  </footer>
+</body>
+</html>

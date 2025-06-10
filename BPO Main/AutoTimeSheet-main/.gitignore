@@ -1,0 +1,23 @@
+# Ignore environment variable files
+.env
+autorun.flaskenv
+pyvenv.cfg
+
+# Ignore Python bytecode files
+__pycache__/
+*.py[cod]
+
+# Ignore virtual environment directories
+venv/
+env/
+myenv/
+docx-template/
+.venv/
+.vscode/
+bin/
+include/
+lib/
+
+# Ignore other sensitive or unnecessary files
+*.log
+*.sqlite3

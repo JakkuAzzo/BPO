@@ -1,0 +1,52 @@
+<!-- admin.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='normalise.css') }}">
+    <title>Admin Dashboard</title>
+</head>
+<body>
+    <header class="container-fluid bg-light">
+        <div class="container d-flex justify-content-between align-items-center py-3">
+          {% if current_user.is_authenticated %}
+            <div>
+              <h1>{{ current_user.organisation.name if current_user.organisation else 'Your Organisation' }}</h1>
+              {% if current_user.organisation and current_user.organisation.logo %}
+                <img src="{{ url_for('static', filename='uploads/' + current_user.organisation.logo) }}" alt="Company Logo" style="height: 50px;">
+              {% else %}
+                <img src="{{ url_for('static', filename='default_logo.png') }}" alt="Company Logo" style="height: 50px;">
+              {% endif %}
+            </div>
+            <nav class="nav">
+              {% if current_user.is_admin %}
+                <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Manage Organisation</a>
+              {% endif %}
+              <a class="nav-link" href="{{ url_for('account_settings') }}">Account Settings</a>
+              <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+            </nav>
+          {% endif %}
+        </div>
+      </header>
+    
+    <h1>Admin Dashboard</h1>
+    <form method="POST" action="/admin">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <label for="role">Role:</label>
+        <select id="role" name="role" required>
+            <option value="employee">Employee</option>
+            <option value="admin">Admin</option>
+        </select>
+        <button type="submit">Create User</button>
+    </form>
+    <h2>Existing Users</h2>
+    <ul>
+        {% for user in users %}
+            <li>{{ user.username }} - {{ user.role.name }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

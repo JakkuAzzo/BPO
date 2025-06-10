@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='normalise.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<header class="container-fluid bg-light">
+    <div class="nav-body">
+      <div class="container d-flex justify-content-between align-items-center py-3">
+        {% if current_user.is_authenticated %}
+        <div>
+          <h1>{{ current_user.organisation.name if current_user.organisation else 'Your Organisation' }}</h1>
+          {% if current_user.organisation and current_user.organisation.logo %}
+            <img src="{{ url_for('static', filename='uploads/' + current_user.organisation.logo) }}" alt="Company Logo" style="height: 50px;">
+          {% else %}
+            <img src="{{ url_for('static', filename='default_logo.png') }}" alt="Company Logo" style="height: 50px;">
+          {% endif %}
+        </div>
+        <nav class="nav">
+          {% if current_user.is_admin %}
+            <a class="nav-link" href="{{ url_for('admin_dashboard') }}">Manage Organisation</a>
+          {% endif %}
+          <a class="nav-link" href="{{ url_for('index') }}">Home Page</a>
+          <a class="nav-link" href="{{ url_for('account_settings') }}">Account Settings</a>
+          <a class="nav-link" href="{{ url_for('logout') }}">Logout</a>
+          <a class="nav-link" href="{{ url_for('info') }}">Info</a>
+        </nav>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  
+<body>
+    <div class="container mt-5">
+        <h1>Account Settings</h1>
+        <div class="card mt-3">
+            <div class="card-header">Manage Users</div>
+            <div class="card-body">
+                <form action="{{ url_for('update_account_settings') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="update_username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="update_username" name="update_username">
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="new_password" name="new_password">
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Update Account</button>
+                </form>
+            </div>
+        </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
