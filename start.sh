@@ -4,8 +4,9 @@
 # run flask server
 (
   cd app
-  export FLASK_APP=app/app.py
-  flask run --port=5000 --host=0.0.0.0 &
+  source ../venv/bin/activate
+  export FLASK_APP="app:create_app"
+  flask run --port=5001 --host=0.0.0.0 &
   FLASK_PID=$!
 )
 
