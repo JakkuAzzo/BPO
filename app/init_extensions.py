@@ -11,14 +11,12 @@ mail = Mail()
 bcrypt = Bcrypt()
 
 def setup(app):
-	print("Setting up extensions")
-	bcrypt.init_app(app)
-	print("bcrypt initialized")
-	db.init_app(app)
-	print("db initialized")
-	migrate.init_app(app, db)
-	print("migrate initialized")
-	login_manager.init_app(app)
-	print("login_manager initialized")
-	mail.init_app(app)
-	print("mail initialized")
+    """Initialise extensions for the given Flask application."""
+
+    print("Setting up extensions")
+    bcrypt.init_app(app)
+    db.init_app(app)
+    migrate.init_app(app, db)
+    login_manager.init_app(app)
+    mail.init_app(app)
+    print("Extensions ready")
